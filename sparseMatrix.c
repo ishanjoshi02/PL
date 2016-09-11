@@ -126,4 +126,4 @@ int main(int argc, char **argv) {
 		}
 	}while(1);
 }
-
+//Addition Function not working properly. Both Transpose functions not done
