@@ -1,129 +1,135 @@
 #include <stdio.h>
-#include <stdlib.h>
-#define MAX 25
-void accept(int c[MAX][3],int row,int col) {
-	int i,j,k=1,var;
+#define MAX 100
+typedef struct {
+	int row,col,value;
+}matrix;
+void accept(matrix a[]) {
+	printf("Enter the Number of Rows and Columns\n");
+	scanf("%d%d",&a[0].row,&a[0].col);
+	int i,j,k,var;
 	printf("Enter the Elements now\n");
-	for(i=0;i<row;i++) {
-		for(j=0;j<col;j++) {
+	for(i=0,k=1;i<a[0].row;i++) {
+		for(j=0;j<a[0].col;j++) {
 			scanf("%d",&var);
 			if(var!=0) {
-				c[k][0] = i;
-				c[k][1] = j;
-				c[k][2] = var;
-				k++;
+				a[k].row = i,
+						a[k].col = j,
+						a[k].value = var,
+						k++;
 			}
 		}
 	}
-	printf("Done Accepting\n");
-	c[0][0] = row;
-	c[0][1] = col;
-	c[0][2] = k-1;
+	a[k].value = k-1;
 }
-void display(int c[MAX][3]) {
-	int i,j,k=1;
-	for(i=0;i<c[0][0];i++) {
-		for(j=0;j<c[0][1];j++) {
-			if(c[k][0]==i && c[k][1]==j) {
-				printf("%d",c[k][2]);
+void display(matrix a[]) {
+	int i,j,k = 1;
+	for(i = 0;i < a[0].row;i++) {
+		for(j = 0;j < a[0].col;j++) {
+			if(i == a[k].row && j == a[k].col) {
+				printf("%d\t",a[k].value);
 				k++;
 			}
 			else {
-				printf("%d",0);
+				printf("%d\t",0);
 			}
-			printf("\t");
 		}
 		printf("\n");
 	}
 }
-int max(int a,int b) {
-	if(a>b) {
-		return a;
-	}
-	return b;
-}
-void add(int c[MAX][3],int c1[MAX][3]){
-	int i,j,k=1,l=1,m=1;
-	int c2[MAX][3];
-	c2[0][0] = max(c[0][0],c1[0][0]);
-	c2[0][1] = max(c[0][1],c1[0][1]);
-	for(i=0;i<c2[0][0];i++) {
-		for(j=0;j<c2[0][1];j++) {
-			if(i==c[k][0] && j==c[k][1]) {
-				if(i==c1[l][0] && j==c1[l][1]) {
-					c2[m][0] = i;
-					c2[m][1] = j;
-					c2[m][2] = c[k][2] + c1[l][2];
-					l++;
-					continue;
-				}
-				else {
-					c2[m][0] = i;
-					c2[m][1] = j;
-					c2[m][2] = c[k][2];
-					continue;
-				}
-				k++;m++;
+int *add(matrix a[],matrix b[]) {
+	matrix c[MAX];
+	c[0].row = a[0].row;
+	c[1].row = a[0].col;
+	int k = 1,l = 1,m = 1;
+	while(k <= a[0].value && l <= b[0].value) {
+		if(a[k].row == b[l].row) {
+			if(a[k].col == b[l].col) {
+				c[m].row = a[k].row;
+				c[m].col = a[k].col;
+				c[m].value = a[k].value + b[l].value;
+				k++; l++; m++;
 			}
-			if(i==c1[l][0] && j==c1[l][1]) {
-				c2[m][0] = i;
-				c2[m][1] = j;
-				c2[m][2] = c1[l][2];
-				l++;m++;
+			else if(a[k].col < b[l].col) {
+				c[m].row = a[k].row;
+				c[m].col = a[k].col;
+				c[m].value = a[k].value;
+				k++; m++;
+			}
+			else {
+				c[m].row = b[l].row;
+				c[m].col = b[l].col;
+				c[m].value = b[l].value;
+				l++; m++;
 			}
 		}
+		else if(a[k].row < b[l].row) {
+			c[m].row = a[k].row;
+			c[m].col = a[k].col;
+			c[m].value = a[k].value;
+			k++; m++;
+		}
+		else {
+			c[m].row = b[l].row;
+			c[m].col = b[l].col;
+			c[m].value = b[l].value;
+			l++; m++;
+		}
 	}
-	display(c2);
+	while(k<=a[0].value) {
+		c[m].row = a[k].row;
+		c[m].col = a[k].col;
+		c[m].value = a[k].value;
+		k++; m++;
+	}
+	while(l<=b[0].value) {
+		c[m].row = b[l].row;
+		c[m].col = b[l].col;
+		c[m].value = b[l].value;
+		l++; m++;
+	}
+	c[0].value = m-1;
+	display(c);
+}
+void stranspose(matrix a[]) {
+	
+}
+void ftranspose(matrix b[]) {
+	
 }
 int main(int argc, char **argv) {
-	int opt,row,row1,col,col1;
-	int c[MAX][3],c1[MAX][3];
+	matrix a[MAX],b[MAX];
+	int opt;
 	do {
-		printf("1.Accept a Sparse Matrix\n");
-		printf("2.Display a Sparse Matrix\n");
-		printf("3.Addition of the two Matrices\n");
-		printf("4.Transpose a Sparse Matrix\n");
-		printf("5.Exit\n");
+		printf("1. Accept the 1st Matrix\n"
+				"2. Accept the 2nd Matrix\n"
+				"3. Add the 2 Matrices\n"
+				"4. Simple Transpose of 1st Matrix\n"
+				"5. Simple Transpose of 2nd Matrix\n"
+				"6. Fast Transpose of 1st Matrix\n"
+				"7. Fast Transpose of 2nd Matrix\n");
 		scanf("%d",&opt);
 		switch(opt) {
 		case 1 : {
-			printf("1.Accept the First Matrix\n2.Accept the Second Matrix\n");
-			scanf("%d",&opt);
-			switch(opt) {
-			case 1 : {
-				printf("Enter the Number of Rows and Number of Columns\n");
-				scanf("%d%d",&row,&col);
-				accept(c,row,col);
-				break;
-			}
-			case 2 : {
-				printf("Enter the Number of Rows and Number of Columns\n");
-				scanf("%d%d",&row1,&col1);
-				accept(c1,row1,col1);
-			}
-			}
+			accept(a);
+			display(a);
 			break;
 		}
 		case 2 : {
-			printf("1.Display First Matrix\n2.Display Second Matrix\n");
-			scanf("%d",&opt);
-			switch(opt) {
-			case 1 : {
-				display(c);
-				break;
-			}
-			case 2 : {
-				display(c1);
-				break;
-			}
-			}
+			accept(b);
+			display(b);
 			break;
 		}
 		case 3 : {
-			add(c,c1);
+			if(a[0].row == b[0].row && a[0].col == b[0].col) {
+				display(add(a,b));
+				break;
+			}
+			else {
+				printf("Invalid Values for Row and Column\n"
+						"Please Try Again\n");
+			}
 			break;
 		}
 		}
 	}while(1);
 }
-//Addition Function not working properly. Both Transpose functions not done
