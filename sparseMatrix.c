@@ -3,7 +3,7 @@
 typedef struct {
 	int row,col,value;
 }matrix;
-void accept(matrix a[]) {
+void accept(matrix a[MAX]) {
 	printf("Enter the Number of Rows and Columns\n");
 	scanf("%d%d",&a[0].row,&a[0].col);
 	int i,j,k,var;
@@ -12,16 +12,16 @@ void accept(matrix a[]) {
 		for(j=0;j<a[0].col;j++) {
 			scanf("%d",&var);
 			if(var!=0) {
-				a[k].row = i,
-						a[k].col = j,
-						a[k].value = var,
-						k++;
+				a[k].row = i;
+				a[k].col = j;
+				a[k].value = var;
+				k++;
 			}
 		}
 	}
 	a[k].value = k-1;
 }
-void display(matrix a[]) {
+void display(matrix a[MAX]) {
 	int i,j,k = 1;
 	for(i = 0;i < a[0].row;i++) {
 		for(j = 0;j < a[0].col;j++) {
@@ -36,67 +36,67 @@ void display(matrix a[]) {
 		printf("\n");
 	}
 }
-int *add(matrix a[],matrix b[]) {
+void add(matrix a[MAX],matrix b[MAX]) {
+	int i = 1,j = 1,k = 1;
 	matrix c[MAX];
 	c[0].row = a[0].row;
-	c[1].row = a[0].col;
-	int k = 1,l = 1,m = 1;
-	while(k <= a[0].value && l <= b[0].value) {
-		if(a[k].row == b[l].row) {
-			if(a[k].col == b[l].col) {
-				c[m].row = a[k].row;
-				c[m].col = a[k].col;
-				c[m].value = a[k].value + b[l].value;
-				k++; l++; m++;
+	c[0].col = a[0].col;
+	while(i<=a[0].value && j<=b[0].value) {
+		if(a[i].row == b[j].row) {
+			if(a[i].col == b[j].col) {
+				c[k].row = a[i].row;
+				c[k].col = a[i].col;
+				c[k].value = a[i].value + b[j].value;
+				i++;j++;k++;
 			}
-			else if(a[k].col < b[l].col) {
-				c[m].row = a[k].row;
-				c[m].col = a[k].col;
-				c[m].value = a[k].value;
-				k++; m++;
+			else if(a[i].row < b[j].row) {
+				c[k].row = a[i].row;
+				c[k].col = a[i].col;
+				c[k].value = a[i].value;
+				i++;k++;
 			}
 			else {
-				c[m].row = b[l].row;
-				c[m].col = b[l].col;
-				c[m].value = b[l].value;
-				l++; m++;
+				c[k].row = b[j].row;
+				c[k].col = b[j].col;
+				c[k].value = b[j].value;
+				j++;k++;
 			}
 		}
-		else if(a[k].row < b[l].row) {
-			c[m].row = a[k].row;
-			c[m].col = a[k].col;
-			c[m].value = a[k].value;
-			k++; m++;
+		else if(a[i].row < b[j].row) {
+			c[k].row = a[i].row;
+			c[k].col = a[i].col;
+			c[k].value = a[i].value;
+			i++;k++;
 		}
 		else {
-			c[m].row = b[l].row;
-			c[m].col = b[l].col;
-			c[m].value = b[l].value;
-			l++; m++;
+			c[k].row = b[j].row;
+			c[k].col = b[j].col;
+			c[k].value = b[j].value;
+			j++;k++;
 		}
 	}
-	while(k<=a[0].value) {
-		c[m].row = a[k].row;
-		c[m].col = a[k].col;
-		c[m].value = a[k].value;
-		k++; m++;
+	while(j<=b[0].value) {
+		c[k].row = b[j].row;
+		c[k].col = b[j].col;
+		c[k].value = b[j].value;
+		j++;k++;
 	}
-	while(l<=b[0].value) {
-		c[m].row = b[l].row;
-		c[m].col = b[l].col;
-		c[m].value = b[l].value;
-		l++; m++;
+	while(i<=a[0].value) {
+		c[k].row = a[i].row;
+		c[k].col = a[i].col;
+		c[k].value = a[i].value;
+		i++;k++;
 	}
-	c[0].value = m-1;
+	c[0].value = k-1;
 	display(c);
 }
 void stranspose(matrix a[]) {
-	
+
 }
 void ftranspose(matrix b[]) {
-	
+
 }
-int main(int argc, char **argv) {
+int main() {
 	matrix a[MAX],b[MAX];
 	int opt;
 	do {
@@ -121,7 +121,7 @@ int main(int argc, char **argv) {
 		}
 		case 3 : {
 			if(a[0].row == b[0].row && a[0].col == b[0].col) {
-				display(add(a,b));
+				add(a,b);
 				break;
 			}
 			else {
