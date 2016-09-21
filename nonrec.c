@@ -2,13 +2,12 @@
 void partition(int a[],int start,int end) {
 	if(start<end) {
 		int mid;
-		mid = (start+end)/2;
+		mid = sort(a,start,end);
 		partition(a,start,mid);
 		partition(a,mid+1,end);
-		sort(a,start,end);
 	}
 }
-void sort(int a[],int start,int end) {
+int sort(int a[],int start,int end) {
 	int i,j,pivot,temp;
 	i = start+1;
 	j = end;
@@ -23,6 +22,7 @@ void sort(int a[],int start,int end) {
 		swapper(&a[j],&a[i]);
 	}
 	swapper(&a[j],&a[pivot]);
+	return j;
 }
 void swapper(int *a,int *b) {
 	int t;
