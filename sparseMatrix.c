@@ -80,32 +80,32 @@ void addSparse(sparse a[], sparse b[]) {
 }
 void fastTranspose(sparse a[]) {
 	sparse c[100];
-	int total[a[0].row],index[a[0].row+1];
+	int total[a[0].col],index[a[0].col+1];
 	int t = 0;
 	c[0].row = a[0].col;
 	c[0].col = a[0].row;
 	c[0].value = a[0].value;
-	while(t<=a[0].row) {
-		a[t].row = 0;
+	while(t<a[0].col) {
+		total[t] = 0;
 		t++;
 	}
 	t = 1;
-	total[0] = 1;
-	while(t<=a[0].row) {
-		total[a[0].row]++;
+	while(t<=a[0].value) {
+		total[a[t].col]++;
 		t++;
 	}
 	index[0] = 1;
 	t = 1;
-	while(t<=a[0].row) {
-		index[t] = total[t] + index[t-1];
+	while(t<=a[0].col) {
+		index[t] = total[t-1] + index[t-1];
+		t++;
 	}
 	t = 1;
 	while(t<=a[0].value) {
-		c[total[a[t].col]].row = a[t].row;
-		c[total[a[t].col]].col = a[t].col;
-		c[total[a[t].col]].value = a[t].value;
-		total[a[t].col]++;
+		c[index[a[t].col]].col = a[t].row;
+		c[index[a[t].col]].row = a[t].col;
+		c[index[a[t].col]].value = a[t].value;
+		index[a[t].col]++; t++;
 	}
 	displaySparse(c);
 }
