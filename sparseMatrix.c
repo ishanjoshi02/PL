@@ -2,26 +2,35 @@
 typedef struct {
   int row,col,value;
 }sparse;
+void convertSparse(sparse a[],int b[][100]) {
+	int i,j,k = 1;
+	for(i=0;i<a[0].row;i++) {
+		for(j=0;j<a[0].col;j++) {
+			if(b[i][j]!=0) {
+				a[k].row = i;
+				a[k].col = j;
+				a[k].value = b[i][j];
+				k++;
+			}
+		}
+	}
+	a[0].value = k-1;
+}
 void acceptSparse(sparse a[]) {
+	int i,j;
+	int b[100][100];
   printf("Enter the Number of Rows and Column\n");
   scanf("%d%d",&a[0].row,&a[0].col);
   printf("Enter the Elements now\n");
-  int i,var,k=1,j;
   for(i=0;i<a[0].row;i++) {
     for(j=0;j<a[0].col;j++) {
-      scanf("%d",&var);
-      if(var!=0) {
-        a[k].row = i;
-        a[k].col = j;
-        a[k].value = var;
-        k++;
-      }
+      scanf("%d",&b[i][j]);
     }
   }
   printf("Accepting Finished\n");
-  a[0].value = k-1;
+  convertSparse(a,b);
 }
-void displaySparse (sparse a[]) {
+void display(sparse a[]) {
   int i,j,k=1;
   for(i=0;i<a[0].row;i++) {
     for(j=0;j<a[0].col;j++) {
@@ -35,7 +44,13 @@ void displaySparse (sparse a[]) {
     }
     printf("\n");
   }
-  printf("Displaying finished\n");
+}
+void displaySparse(sparse a[]) {
+	int i;
+	printf("Row:\tColumn:\tValue:\n");
+	for(i=1;i<=a[0].value;i++) {
+		printf(" %d\t%d\t%d\n",a[i].row,a[i].col,a[i].value);
+	}
 }
 void addSparse(sparse a[], sparse b[]) {
   sparse c[100];
@@ -76,7 +91,7 @@ void addSparse(sparse a[], sparse b[]) {
       }
     }
   }
-  displaySparse(c);
+  display(c);
 }
 void fastTranspose(sparse a[]) {
 	sparse c[100];
@@ -107,10 +122,15 @@ void fastTranspose(sparse a[]) {
 		c[index[a[t].col]].value = a[t].value;
 		index[a[t].col]++; t++;
 	}
+	display(c);
 	displaySparse(c);
 }
 void simpleTranspose(sparse a[]) {
-
+	sparse c[a[0].value];
+	c[0].row = a[0].col;
+	c[0].col = a[0].row;
+	c[0].value = a[0].value;
+	int i,j;
 }
 int main() {
   sparse a[100],b[100];
@@ -128,11 +148,13 @@ int main() {
 	  switch(opt) {
 	  case 1 : {
 		  acceptSparse(a);
+		  display(a);
 		  displaySparse(a);
 		  break;
 	  }
 	  case 2 : {
 		  acceptSparse(b);
+		  display(b);
 		  displaySparse(b);
 		  break;
 	  }
