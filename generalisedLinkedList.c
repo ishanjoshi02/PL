@@ -1,81 +1,96 @@
 #include <stdio.h>
 #include <stdlib.h>
 typedef struct {
-	int flag;
 	char data;
-	struct node *next,*level,*plevel;
+	int flag;
+	struct node *next,*nextlevel;
 }node;
+
 node *create(node *head) {
-	int temp = 0;
-	char c;
-	node *p,*q;
+	node *p,*q[5];
 	head = (node *)malloc(sizeof(node));
 	p = head;
-	printf("Enter the Book Index now\n");
+	char something;
+	int temp = -1;
+	printf("Enter the Data now\n");
 	do {
-		scanf(" %c",&c);
-		if(c == '(') {
-			if(temp != 0) {
-				p->level = (node *)malloc(sizeof(node));
-				q = p;
+		scanf(" %c",&something);
+		if(something == '(') {
+			if(temp != -1) {
 				p->flag = 1;
-				p = p->level;
-				p->plevel = q;
+				q[temp] = p;
+				p->nextlevel = (node *)malloc(sizeof(node));
+				p = p->nextlevel;
 			}
 			temp ++;
 		}
-		else if(c == ')') {
-			p = q;
-			temp--;
+		else if(something == ')') {
+			if(temp != -1) {
+				p = q[temp];
+				p = p->next;
+			}
+			temp --;
 		}
 		else {
-			p->next = (node *)malloc(sizeof(node));
 			p->flag = 0;
+			p->data = something;
+			p->next = (node *)malloc(sizeof(node));
 			p = p->next;
+			p->nextlevel = NULL;
 			p->next = NULL;
-			p->level = NULL;
-			p->data = c;
 		}
-	}while(temp > 0);
-	p->plevel = NULL;
-	p->level = NULL;
-	p->next = NULL;
+	}while(temp != -1);
 	return head;
 }
 void display(node *head) {
-	node *p;
+	node *p,*q[5];
+	int temp = 0;
 	p = head;
 	printf("(\t");
 	do {
 		if(p->flag == 0) {
-				printf("%c\t",p->data);
+			printf("%c\t",p->data);
+			if(p->next == NULL && temp > 0) {
+				p = q[temp--];
+				printf(")\t");
+			}
+			else {
 				p = p->next;
+			}
 		}
 		else {
-			p = p->level;
+			q[temp++] = p;
+			p = p->nextlevel;
 			printf("(\t");
 		}
-
-	}while(p != NULL);
+	}while(p->next != NULL && p->nextlevel != NULL && temp > 0);
 	printf(")\n");
 }
 int main() {
-	node *head;
-	head->plevel = NULL;
-	int opt;
+	node *head = NULL;
+	int temp;
 	do {
-		printf("1. Create Generalized Linked List\n"
-				"2. Display Generalized Linked List\n");
-		scanf("%d",&opt);
-		switch(opt) {
+		printf("1. Create a Generalized Linked List\n"
+				"2. Display the list \n"
+				"3. Exit \n");
+		scanf("%d",&temp);
+		switch(temp) {
 		case 1 : {
 			head = create(head);
 			break;
 		}
 		case 2 : {
-			display(head);
+			if(head != NULL) {
+				display(head);
+			}
+			else {
+				printf("No list exists\n");
+			}
+			break;
+		}
+		case 3 : {
+			return 0;
 		}
 		}
 	}while(1);
-	return 0;
 }
