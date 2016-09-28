@@ -1,78 +1,77 @@
 #include <stdio.h>
 #include <stdlib.h>
 typedef struct {
-	char data;
 	int flag;
-	struct node *next,*nextlevel;
+	char data;
+	struct node *next,*level;
 }node;
-
+node *space() {
+	return (node *)malloc(sizeof(node));
+}
 node *create(node *head) {
-	node *p,*q[5];
-	head = (node *)malloc(sizeof(node));
-	p = head;
-	char something;
+	head = space();
+	node *p = head,*q[5];
+	char c;
 	int temp = -1;
-	printf("Enter the Data now\n");
 	do {
-		scanf(" %c",&something);
-		if(something == '(') {
+		scanf(" %c",&c);
+		if(c == '(') {
 			if(temp != -1) {
 				p->flag = 1;
 				q[temp] = p;
-				p->nextlevel = (node *)malloc(sizeof(node));
-				p = p->nextlevel;
+				p->level = space();
+				p = p->level;
 			}
-			temp ++;
+			temp++;
 		}
-		else if(something == ')') {
+		else if(c == ')') {
+			temp-- ;
 			if(temp != -1) {
 				p = q[temp];
+				p->next = space();
 				p = p->next;
 			}
-			temp --;
 		}
 		else {
 			p->flag = 0;
-			p->data = something;
-			p->next = (node *)malloc(sizeof(node));
+			p->level = NULL;
+			p->data = c;
+			p->next = space();
 			p = p->next;
-			p->nextlevel = NULL;
 			p->next = NULL;
+			p->level = NULL;
 		}
 	}while(temp != -1);
 	return head;
 }
 void display(node *head) {
-	node *p,*q[5];
+	node *p = head,*q[5];
 	int temp = 0;
-	p = head;
 	printf("(\t");
 	do {
 		if(p->flag == 0) {
 			printf("%c\t",p->data);
-			if(p->next == NULL && temp > 0) {
-				p = q[temp--];
-				printf(")\t");
-			}
-			else {
+			if(p->level == NULL && p->next == NULL && temp !=0) {
+				p = q[--temp];
 				p = p->next;
+				printf(")\t");
 			}
 		}
 		else {
 			q[temp++] = p;
-			p = p->nextlevel;
+			p = p->level;
 			printf("(\t");
 		}
-	}while(p->next != NULL && p->nextlevel != NULL && temp > 0);
+	}while(temp != 0);
 	printf(")\n");
 }
 int main() {
 	node *head = NULL;
 	int temp;
 	do {
-		printf("1. Create a Generalized Linked List\n"
-				"2. Display the list \n"
-				"3. Exit \n");
+		printf("1. Generate Generalized Linked List\n"
+				"2. Display the List\n"
+				"3. Exit\n");
 		scanf("%d",&temp);
 		switch(temp) {
 		case 1 : {
@@ -80,16 +79,11 @@ int main() {
 			break;
 		}
 		case 2 : {
-			if(head != NULL) {
-				display(head);
-			}
-			else {
-				printf("No list exists\n");
-			}
+			display(head);
 			break;
 		}
 		case 3 : {
-			return 0;
+			exit(0);
 		}
 		}
 	}while(1);
