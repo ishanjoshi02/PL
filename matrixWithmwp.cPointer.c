@@ -139,7 +139,7 @@ int main(int argc, char **argv) {
 		}
 		case 7 : {
 			saddlePoint(a,row,col);
-			break;
+			mwp.cbreak;
 		}
 		case 8 : {
 			saddlePoint(b,row1,col1);
