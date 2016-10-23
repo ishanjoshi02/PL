@@ -91,10 +91,22 @@ void addSparse(sparse a[], sparse b[]) {
       }
     }
   }
+  while(m<=a[0].value) {
+    c[o].row = a[m].row;
+    c[o].col = a[m].col;
+    c[o].value = a[m].value;
+    m++; o++;
+  }
+  while(n<=b[0].value) {
+    c[o].row = b[n].row;
+    c[o].col = b[n].col;
+    c[o].value = b[n].value;
+    o++; n++;
+  }
   display(c);
 }
 void fastTranspose(sparse a[]) {
-	sparse c[100];
+	sparse c[20];
 	int total[a[0].col],index[a[0].col+1];
 	int t = 0;
 	c[0].row = a[0].col;
@@ -130,10 +142,21 @@ void simpleTranspose(sparse a[]) {
 	c[0].row = a[0].col;
 	c[0].col = a[0].row;
 	c[0].value = a[0].value;
-	int i,j;
+	int i,j,k=1;
+  for(i=0;i<a[0].col;i++) {
+    for(j=1;j<=a[0].value;j++) {
+      if(i==a[j].col) {
+        c[k].row = a[j].col;
+        c[k].col = a[j].row;
+        c[k++].value = a[j].value;
+      }
+    }
+  }
+  display(c);
+  displaySparse(c);
 }
 int main() {
-  sparse a[100],b[100];
+  sparse a[10],b[10];
   int opt;
   do {
 	  printf("1. Accept First Matrix\n"
@@ -159,7 +182,7 @@ int main() {
 		  break;
 	  }
 	  case 3 : {
-		  if(a[0].row != b[0].row || a[0].col != b[0].col) {
+		  if(a[0].row == b[0].row && a[0].col == b[0].col) {
 			  addSparse(a,b);
 		  }
 		  else {
@@ -175,10 +198,15 @@ int main() {
 		  fastTranspose(b);
 		  break;
 	  }
+    case 6 : {
+      simpleTranspose(a);
+      break;
+    }
+    case 7 : {
+      simpleTranspose(b);
+      break;
+    }
 	  case 8 : {
-		  return 0;
-	  }
-	  default : {
 		  return 0;
 	  }
 	  }
