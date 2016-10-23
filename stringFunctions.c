@@ -3,24 +3,20 @@
 
 int length(char *a) {
 	int i;
-	for(i=1;*a!='\0';i++,a++) {
+	for(i=1;*(a+i)!='\0';i++) {
 	}
-	return i-1;
+	return i;
 }
 void reverse(char *a) {
-	char *temp;
-	int i;
-	temp = (char *)malloc(sizeof(char)*length(a));
-	for(i=0;i<length(a);i++) {
-		temp++;
+	char temp;
+	int i=0	,j=length(a)-1;
+	while(i<j) {
+		temp = *(a+i);
+		*(a+i) = *(a+j);
+		*(a+j) = temp;
+		i++;j--;
 	}
-	while(*a!='\0') {
-		*temp = *a;
-		temp--;a++;
-	}
-	*(temp+length(a)+1) = '\0';
-	a = temp;
-	printf("%s",*a);
+	printf("%s\n",a);
 }
 char *copy(char *destination,char *source) {
 	for(;*source!='\0';source++,destination++) {
@@ -68,6 +64,7 @@ int main(int argc, char **argv) {
 				"6. Length of Second String\n"
 				"7. Reverse First String\n"
 				"8. Reverse Second String\n"
+				"9. Exit\n"
 				);
 		scanf("%d",&option);
 		switch(option) {
@@ -115,6 +112,7 @@ int main(int argc, char **argv) {
 			reverse(b);
 			break;
 		}
+		case 9 : return 0;
 		}
 	} while (1);
 }
