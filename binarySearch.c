@@ -2,17 +2,17 @@
 #include <stdlib.h>
 void binarySearch(int a[],int key,int start,int end);
 int main(int argc, char const *argv[]) {
-  int *a,key,elements;
+  int key,elements;
   printf("Enter the Number of Elements\n");
   scanf("%d",&elements);
-  a = (int *)malloc(sizeof(int)*elements);
+  int a[elements];
   printf("Enter the Elements now\n");
-  for(int i=0;i<10;i++,a++) {
-    scanf("%d",a);
+  for(int i=0;i<elements;i++) {
+    scanf("%d",&a[i]);
   }
   printf("Enter the Key Element\n");
-  scanf("%d\n",&key);
-  binarySearch(a,key,0,10);
+  scanf("%d",&key);
+  binarySearch(a,key,0,elements);
   return 0;
 }
 void binarySearch(int a[],int key,int start,int end) {
